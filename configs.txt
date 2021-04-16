@@ -1,0 +1,3 @@
+opencv_createsamples -info product.info -num 150 -minHitRate 0.998 -maxFalseAlarmRate 0.3 -w 38 -h 46 -vec product.vec
+
+opencv_traincascade -data data -vec product.vec -bg bg.txt -numPos 130 -numNeg 150 -minHitRate 0.998 -maxFalseAlarmRate 0.3 -numStages 10 -w 38 -h 46 -featureType LBP
