@@ -159,6 +159,8 @@ class Application(tk.Frame):
     def iniciar_prueba(self):
         self.cap = cv2.VideoCapture(1)
         self.Button1["state"]=tk.DISABLED
+        self.Button3["state"]=tk.tk.NORMAL
+
         
         if self.cap.isOpened() is not None:
             if int(self.opcion.get())== 1:
@@ -201,6 +203,7 @@ class Application(tk.Frame):
         self.Button3 = tk.Button(self,width=45)
         self.Button3["text"] = "Analizar"
         self.Button3.grid(column=1,row=7,padx=5,pady=5)
+        self.Button3["state"]=tk.DISABLED
        
 
     __principal_interfaz=principal_interfaz

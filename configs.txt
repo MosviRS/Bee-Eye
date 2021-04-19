@@ -1,3 +1,15 @@
 opencv_createsamples -info product.info -num 150 -minHitRate 0.998 -maxFalseAlarmRate 0.3 -w 38 -h 46 -vec product.vec
 
 opencv_traincascade -data data -vec product.vec -bg bg.txt -numPos 130 -numNeg 150 -minHitRate 0.998 -maxFalseAlarmRate 0.3 -numStages 10 -w 38 -h 46 -featureType LBP
+
+
+
+
+    ./opencv_traincascade -data mix25x15 -vec mix.vec -bg negatives.txt -numStages 15 
+-minHitRate 0.999 -maxFalseAlarmRate 0.5 -numPos 3600 -numNeg 3045 -w 25 -h 15  
+-precalcValBufSize 2048 -precalcIdxBufSize 2048 -mode ALL
+
+
+opencv_traincascade -data car-classifier -vec pos-samples.vec -bg neg-image-filepaths.txt -precalcValBufSize 256 -precalcIdxBufSize 256 -numPos 354 -numNeg 4000 -nstages 20 -minhitrate 0.999 -maxfalsealarm 0.5 -w 50 -h 50 -nonsym -baseFormatSave
+
+opencv_traincascade -data car-classifier -vec pos-samples.vec -bg neg-image-filepaths.txt -precalcValBufSize 256 -precalcIdxBufSize 256 -numPos 200 -numNeg 2000 -nstages 20 -minhitrate 0.999 -maxfalsealarm 0.5 -w 50 -h 50 -nonsym -baseFormatSave
