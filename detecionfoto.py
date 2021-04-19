@@ -1,7 +1,7 @@
 import cv2
 
-majinBooClassif = cv2.CascadeClassifier('C:/Users/user/Downloads/usb/classifier/cascade.xml')
-frame = cv2.imread('../postImages/kang0.jpg')
+majinBooClassif = cv2.CascadeClassifier('C:/Users/user/Downloads/opencv/build/x64/vc14/bin/data/cascade.xml')
+frame = cv2.imread('../../postImages/kang2.jpg')
 while True:
     
  

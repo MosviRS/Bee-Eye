@@ -1,6 +1,6 @@
 import cv2
 cap = cv2.VideoCapture(1)
-majinBooClassif = cv2.CascadeClassifier('C:/Users/user/Downloads/usb/classifier/cascade.xml')
+majinBooClassif = cv2.CascadeClassifier('C:/Users/user/Downloads/opencv/build/x64/vc14/bin/data/cascade.xml')
 while True:
     
     ret,frame = cap.read()
