@@ -18,10 +18,9 @@ class Application(tk.Frame):
      
         self.__principal_interfaz()
         self.__i=0
+        self.imagenGlobal=None
        
-        
-        
-
+     
     def create_widgets(self):
         self.hi_there = tk.Button(self)
         self.hi_there["text"] = "Empezar"
@@ -33,14 +32,11 @@ class Application(tk.Frame):
         self.quit.pack(side="bottom")
 
     def deteccion(self):
-         
-            
-             
             majinBooClassif = cv2.CascadeClassifier('C:/Users/user/Downloads/usb/classifier/cascade.xml')
             if self.cap is not None:
                 
-                ret,frame = self.cap.read()
-                
+                ret,img = self.cap.read()
+                frame=img.copy()
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 toy = majinBooClassif.detectMultiScale(gray,
@@ -52,6 +48,7 @@ class Application(tk.Frame):
                     cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
                     cv2.putText(frame,'object',(x,y-10),2,0.7,(0,255,0),2,cv2.LINE_AA)
 
+                self.imagenGlobal=img.copy()
                 im = Image.fromarray(frame)
                 img = ImageTk.PhotoImage(image=im)
                 lblVideo.configure(image=img)
@@ -66,7 +63,7 @@ class Application(tk.Frame):
     def dibujar(self,mask,color,ROI,namecolor,frame):
         font = cv2.FONT_HERSHEY_SIMPLEX
         _,contornos,_= cv2.findContours(mask, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-        cv2.rectangle(frame,(40 -2,50-2),(600+2,300+2),(0,255,255),1)
+        cv2.rectangle(frame,(10-2,10-2),(630+2,300+2),(0,255,255),1)
         for c in contornos:
             area = cv2.contourArea(c)
             if area > 3000:
@@ -103,8 +100,10 @@ class Application(tk.Frame):
         pinkAlto1=np.array([170,255,255], np.uint8)
         
         if self.cap is not None:
-            ret, frame = self.cap.read()
+            ret, img = self.cap.read()
+            frame=img.copy()
             ROI = frame[0:307,0:650]
+            
             if ret == True:
 
                 frameHSV = cv2.cvtColor(ROI,cv2.COLOR_BGR2HSV)
@@ -127,6 +126,7 @@ class Application(tk.Frame):
                 #frame=ha.iniciar_video(ret,frame,ROI)
                 frame = imutils.resize(frame, width=700)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                self.imagenGlobal=img[0:307,0:650].copy()
                 im = Image.fromarray(frame)
                 img = ImageTk.PhotoImage(image=im)
                 lblVideo.configure(image=img)
@@ -142,24 +142,26 @@ class Application(tk.Frame):
                 lblVideo.image = ""
                 self.cap.release()
        
-    async def takepicture(self,i,frame):
-       await asyncio.sleep(2)
-       cv2.imwrite('postImages/Miel'+str(self.__i)+'.jpg',frame)
+    def takepicture(self):
+       #await asyncio.sleep(2)
+   
+       cv2.imwrite('Images/Miel'+str(self.__i)+'.jpg',self.imagenGlobal)
        self.__i+=1
     def detener(self):
         self.cap.release()
-        ImagenFondo=cv2.imread("images/imagenvacia.png")
+        ImagenFondo=cv2.imread("Images/imagenvacia.png")
         ImagenFondo = imutils.resize(ImagenFondo, width=700)
         im = Image.fromarray(  ImagenFondo)
         img = ImageTk.PhotoImage(image=im)
         lblVideo.configure(image=img)
         lblVideo.image = img
         self.Button1["state"]=tk.NORMAL
+        self.Button3["state"]=tk.DISABLED
 
     def iniciar_prueba(self):
-        self.cap = cv2.VideoCapture(1)
+        self.cap = cv2.VideoCapture(0)
         self.Button1["state"]=tk.DISABLED
-        self.Button3["state"]=tk.tk.NORMAL
+        self.Button3["state"]=tk.NORMAL
 
         
         if self.cap.isOpened() is not None:
@@ -193,7 +195,7 @@ class Application(tk.Frame):
         lblVideo=tk.Label(self,height =500)
         lblVideo.grid(column=0,row=3,columnspan=2)
         #lblVideo.bind("<Return>", self.on_enter_usuario_entry)
-        ImagenFondo=cv2.imread("images/imagenvacia.png")
+        ImagenFondo=cv2.imread("Images/imagenvacia.png")
         ImagenFondo = imutils.resize(ImagenFondo, width=700)
         im = Image.fromarray(  ImagenFondo)
         img = ImageTk.PhotoImage(image=im)
@@ -204,6 +206,7 @@ class Application(tk.Frame):
         self.Button3["text"] = "Analizar"
         self.Button3.grid(column=1,row=7,padx=5,pady=5)
         self.Button3["state"]=tk.DISABLED
+        self.Button3["command"]=self.takepicture
        
 
     __principal_interfaz=principal_interfaz
