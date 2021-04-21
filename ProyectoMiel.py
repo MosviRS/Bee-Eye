@@ -6,6 +6,7 @@ import imutils
 from matplotlib import pyplot as plt
 import numpy as np
 import asyncio
+from clases.postProcesamiento import postporcesmiento
 
 
 class Application(tk.Frame):
@@ -19,6 +20,7 @@ class Application(tk.Frame):
         self.__principal_interfaz()
         self.__i=0
         self.imagenGlobal=None
+        self.objimg=postporcesmiento()
        
      
     def create_widgets(self):
@@ -144,9 +146,15 @@ class Application(tk.Frame):
        
     def takepicture(self):
        #await asyncio.sleep(2)
-   
-       cv2.imwrite('Images/Miel'+str(self.__i)+'.jpg',self.imagenGlobal)
-       self.__i+=1
+        img=self.imagenGlobal
+        scale_percent = 50 # percent of original size
+        width = int(img.shape[1] * scale_percent / 100)
+        height = int(img.shape[0] * scale_percent / 100)
+        dim = (width, height)
+        # resize image
+        resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+        self.objimg.main(resized)
+        self.__i+=1
     def detener(self):
         self.cap.release()
         ImagenFondo=cv2.imread("Images/imagenvacia.png")
