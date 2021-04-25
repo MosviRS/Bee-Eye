@@ -21,6 +21,8 @@ class Application(tk.Frame):
         self.__i=0
         self.imagenGlobal=None
         self.objimg=postporcesmiento()
+      
+     
        
      
     def create_widgets(self):
@@ -42,9 +44,9 @@ class Application(tk.Frame):
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 toy = majinBooClassif.detectMultiScale(gray,
-                scaleFactor = 5,
-                minNeighbors = 95,
-                minSize=(60,68))
+                scaleFactor = int(self.scale.get()),
+                minNeighbors = int(self.neigbors.get()),
+                minSize=(self.sW.get(),self.sH.get()))
                 for (x,y,w,h) in toy:
                 
                     cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
@@ -128,7 +130,7 @@ class Application(tk.Frame):
                 #frame=ha.iniciar_video(ret,frame,ROI)
                 frame = imutils.resize(frame, width=700)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                self.imagenGlobal=img[0:307,0:650].copy()
+                self.imagenGlobal=img.copy()
                 im = Image.fromarray(frame)
                 img = ImageTk.PhotoImage(image=im)
                 lblVideo.configure(image=img)
@@ -151,9 +153,9 @@ class Application(tk.Frame):
         width = int(img.shape[1] * scale_percent / 100)
         height = int(img.shape[0] * scale_percent / 100)
         dim = (width, height)
-        # resize image
+        #resize image
         resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        self.objimg.main(resized)
+        self.objimg.main(img)
         self.__i+=1
     def detener(self):
         self.cap.release()
@@ -191,17 +193,41 @@ class Application(tk.Frame):
         self.Button2.grid(column=1,row=0,padx=5,pady=5)
         self.Button2["command"] = self.detener
         self.opcion = tk.IntVar() 
-        
+        self.scale= tk.IntVar() 
+        self.neigbors= tk.IntVar() 
+        self.sW= tk.IntVar() 
+        self.sH= tk.IntVar() 
+
         self.Radiobutton1=tk.Radiobutton(self, text="Color       ", variable=self.opcion,
         value=1)
         self.Radiobutton1.grid(column=0,row=1)
         self.Radiobutton2=tk.Radiobutton(self, text="Deteccion", variable=self.opcion,
         value=2)
-        self.Radiobutton2.grid(column=0,row=2)    
+        self.Radiobutton2.grid(column=1,row=1)   
+
+        self.scale = tk.Scale(self, variable=self.scale,label='Sacale Factor', from_=3, to=10, 
+        orient=tk.HORIZONTAL, length=200, showvalue=5,
+        tickinterval=2, resolution=0.01)
+        self.scale.grid(column=0,row=3,padx=5,pady=5) 
+        
+        self.Neighbors = tk.Scale(self,variable=self.neigbors, label='minNeighbors', from_=20, to=100, 
+        orient=tk.HORIZONTAL, length=200, showvalue=95,
+        tickinterval=20, resolution=0.01)
+        self.Neighbors.grid(column=1,row=3,padx=5,pady=5) 
+
+        self.sizew = tk.Scale(self, variable=self.sW,label='Wi', from_=1, to=100, 
+        orient=tk.HORIZONTAL, length=200, showvalue=5,
+        tickinterval=30, resolution=0.01)
+        self.sizew.grid(column=0,row=4,padx=5,pady=5) 
+        
+        self.sizeh = tk.Scale(self,variable=self.sH, label='HE', from_=1, to=100, 
+        orient=tk.HORIZONTAL, length=200, showvalue=95,
+        tickinterval=30, resolution=0.01)
+        self.sizeh.grid(column=1,row=4,padx=5,pady=5) 
 
         global lblVideo
-        lblVideo=tk.Label(self,height =500)
-        lblVideo.grid(column=0,row=3,columnspan=2)
+        lblVideo=tk.Label(self,height =400)
+        lblVideo.grid(column=0,row=5,columnspan=2)
         #lblVideo.bind("<Return>", self.on_enter_usuario_entry)
         ImagenFondo=cv2.imread("Images/imagenvacia.png")
         ImagenFondo = imutils.resize(ImagenFondo, width=700)
@@ -215,14 +241,18 @@ class Application(tk.Frame):
         self.Button3.grid(column=1,row=7,padx=5,pady=5)
         self.Button3["state"]=tk.DISABLED
         self.Button3["command"]=self.takepicture
-       
+
+      
+
 
     __principal_interfaz=principal_interfaz
-
+    
 
    
     def say_hi(self):
         print("hi there, everyone!")
+    def nothitn(self):
+        pass
 
 root = tk.Tk()
 app = Application(master=root)
