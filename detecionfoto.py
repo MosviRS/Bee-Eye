@@ -1,15 +1,19 @@
 import cv2
 
-majinBooClassif = cv2.CascadeClassifier('C:/Users/user/Downloads/opencv/build/x64/vc14/bin/data/cascade.xml')
-frame = cv2.imread('../../postImages/kang2.jpg')
+majinBooClassif = cv2.CascadeClassifier('C:/Users/user/Desktop/mosvi/OneDrive/Documentos/programas visual basic/SIMUALCION/dev/VisionArtifitial/proyecto_miel/haarCascade/dulces.xml')
+frame = cv2.imread('Images/productos.png')
+scale_percent = 50 # percent of original size
+width = int(frame.shape[1] * scale_percent / 100)
+height = int(frame.shape[0] * scale_percent / 100)
+dim = (width, height)
+        #resize image
+frame = cv2.resize(frame, dim, interpolation = cv2.INTER_AREA)
 while True:
     
  
-    
-
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     toy = majinBooClassif.detectMultiScale(gray,
-    scaleFactor = 5,
+    scaleFactor = 6,
     minNeighbors = 95,
     minSize=(60,68))
     for (x,y,w,h) in toy:

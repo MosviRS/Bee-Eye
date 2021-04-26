@@ -184,35 +184,40 @@ class postporcesmiento:
             
             #crop roi from original image
             img_crop=image[y1:y1+y2,x1:x1+x2]
-            
+            print(rect)
             #show cropped image
             cv2.imshow("crop"+str(crop_number),img_crop)
             print(rect)
          
                     
             crop_number+=1
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
     def brillo(self,img):
         cols, rows,_ = img.shape
         brightness = numpy.sum(img) / (255 * cols * rows)
         minimum_brightness = 0.66
         alpha = brightness / minimum_brightness
         bright_img = cv2.convertScaleAbs(img, alpha = alpha, beta = 255 * (1 - alpha))
-        cv2.imshow('frame2',img)       
+        #cv2.imshow('frame2',img) 
+        return img      
     def main(self,img):
       listaPsroductos=[]
-      imglistROI=self.getRoisAutomaticImage(img)
+      img=self.brillo(img)
+      self.getRoisDetectionImage(img)
+      #imglistROI=self.getRoisAutomaticImage(img)
       
       #self.imageHaarDetection(imglistROI)
       #imglistROItextures=self.getRoiTextures(imglistROI)
       #listaPsroductos=self.textureDEtection(imglistROItextures)
 
-      for i in imglistROI:
+      #for i in imglistROI:
           #dst=cv2.fastNlMeansDenoisingColored(img,None,10,10,7,21)
           
-          cv2.imshow(f'frame',i)
-          self.brillo(i)
-          cv2.waitKey(0)
-          cv2.destroyAllWindows()
+         # cv2.imshow(f'frame',i)
+         # self.brillo(i)
+         # cv2.waitKey(0)
+         # cv2.destroyAllWindows()
 
      
 
