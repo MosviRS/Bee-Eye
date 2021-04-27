@@ -3,7 +3,7 @@ import numpy as np
 import glob
 import mahotas  # Contiene la implementación de texturas de Haralick que necesitamos.
 from sklearn.svm import LinearSVC
-from sklearn.externals import joblib  # Modelo que entrenaremos para clasificar las texturas.
+import joblib  # Modelo que entrenaremos para clasificar las texturas.
 import numpy as numpy
 class postporcesmiento:
 
@@ -125,6 +125,7 @@ class postporcesmiento:
         crop_number=0 
         listImages=[]
         for image in listImages:
+      
             for rect in ROIs:
                 x1=rect[0]
                 y1=rect[1]
@@ -140,7 +141,6 @@ class postporcesmiento:
         
         return listImages
 
-    
     def getRoisDetectionImage(self,image):
         
         ROIs = cv2.selectROIs("Select Rois",image)
@@ -160,15 +160,11 @@ class postporcesmiento:
             
             #crop roi from original image
             img_crop=image[y1:y1+y2,x1:x1+x2]
-            print(rect)
+            cv2.imwrite("crop"+str(crop_number)+".jpeg",img_crop)
             #show cropped image
-            cv2.imshow("crop"+str(crop_number),img_crop)
-            print(rect)
-         
                     
             crop_number+=1
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        
     def brillo(self,img):
         cols, rows,_ = img.shape
         brightness = numpy.sum(img) / (255 * cols * rows)
@@ -179,8 +175,10 @@ class postporcesmiento:
         return img      
     def main(self,img):
       listaPsroductos=[]
+      lsitaImagens=[]
       img=self.brillo(img)
       self.getRoisDetectionImage(img)
+     
       #imglistROI=self.getRoisAutomaticImage(img)
       
       #self.imageHaarDetection(imglistROI)

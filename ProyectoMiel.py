@@ -21,6 +21,8 @@ class Application(tk.Frame):
         self.__i=0
         self.imagenGlobal=None
         self.objimg=postporcesmiento()
+       
+       
       
      
        
@@ -197,6 +199,9 @@ class Application(tk.Frame):
         self.neigbors= tk.IntVar() 
         self.sW= tk.IntVar() 
         self.sH= tk.IntVar() 
+        
+
+
 
         self.Radiobutton1=tk.Radiobutton(self, text="Color       ", variable=self.opcion,
         value=1)
