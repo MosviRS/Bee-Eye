@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import asyncio
 from clases.postProcesamiento import postporcesmiento
+import cv2 as cv2
 
 
 class Application(tk.Frame):
@@ -24,9 +25,6 @@ class Application(tk.Frame):
        
        
       
-     
-       
-     
     def create_widgets(self):
         self.hi_there = tk.Button(self)
         self.hi_there["text"] = "Empezar"
@@ -64,15 +62,14 @@ class Application(tk.Frame):
                 
              
 
-
     #__create_widgets=create_widgets
     def dibujar(self,mask,color,ROI,namecolor,frame):
         font = cv2.FONT_HERSHEY_SIMPLEX
         _,contornos,_= cv2.findContours(mask, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
-        cv2.rectangle(frame,(10-2,10-2),(630+2,300+2),(0,255,255),1)
+        cv2.rectangle(frame,(2,60),(630+2,300+2),(0,255,255),1)
         for c in contornos:
             area = cv2.contourArea(c)
-            if area > 3000:
+            if area > 1500:
                 M = cv2.moments(c)
                 if (M["m00"]==0): M["m00"]=1
                 x = int(M["m10"]/M["m00"])
@@ -85,25 +82,36 @@ class Application(tk.Frame):
     def visualizar(self):
     
        
-        azulBajo = np.array([100,100,20],np.uint8)
-        azulAlto = np.array([110,255,255],np.uint8)
-        amarilloBajo = np.array([15,100,20],np.uint8)
-        amarilloAlto = np.array([45,255,255],np.uint8)
-        redBajo1 = np.array([0,100,20],np.uint8)
-        redAlto1 = np.array([5,255,255],np.uint8)
-        redBajo2 = np.array([175,100,20],np.uint8)
-        redAlto2 = np.array([179,255,255],np.uint8)
-        #Valores de Verde parte baja
-        greenBajo1=np.array([30,100,20], np.uint8)
-        greenAlto1=np.array([65,255,255], np.uint8)
+        #propoleo
+        propBajo1=np.array([0,0,0],np.uint8(8))
+        propAlto1=np.array([125,255,30],np.uint8(8))
+        #rojo
+        redBajo1=np.array([0,100,20],np.uint8(8))
+        redAlto1=np.array([8,255,255],np.uint8(8))
+        redBajo2=np.array([175,100,20],np.uint8(8))
+        redAlto2=np.array([179,255,255],np.uint8(8))
+        #eucalipto
+        eucaBajo1=np.array([30,100,20],np.uint8(8))
+        eucaAlto1=np.array([65,255,255],np.uint8(8))
+        #polen
+        polenBajo1 = np.array([15,120,140],np.uint8)
+        polenAlto1 = np.array([255,180,220],np.uint8)
+        #shmapoo
+        shaBajo1 = np.array([14,190,130],np.uint8)
+        shaAlto1 = np.array([18,255,255],np.uint8)
+        #gomitas
+        gomiBajo1 = np.array([14,0,225],np.uint8)
+        gomiAlto1 = np.array([100,150,255],np.uint8)
+        #miel
+        mielBajo1=np.array([0,190,60],np.uint8(8))
+        mielAlto1=np.array([30,220,175],np.uint8(8))
 
-        #Valores de Violeta parte baja
-        violetBajo1=np.array([120,100,20], np.uint8)
-        violetAlto1=np.array([145,255,255], np.uint8)
+        redBajo1=np.array([0,100,20],np.uint8(8))
+        redAlto1=np.array([8,255,255],np.uint8(8))
+        redBajo2=np.array([175,100,20],np.uint8(8))
+        redAlto2=np.array([179,255,255],np.uint8(8))
 
-        #Valores de Rosa parte baja
-        pinkBajo1=np.array([145,100,20], np.uint8)
-        pinkAlto1=np.array([170,255,255], np.uint8)
+      
         
         if self.cap is not None:
             ret, img = self.cap.read()
@@ -113,23 +121,27 @@ class Application(tk.Frame):
             if ret == True:
 
                 frameHSV = cv2.cvtColor(ROI,cv2.COLOR_BGR2HSV)
-                maskAzul = cv2.inRange(frameHSV,azulBajo,azulAlto)
-                maskAmarillo = cv2.inRange(frameHSV,amarilloBajo,amarilloAlto)
+                maskprop = cv2.inRange(frameHSV,propBajo1,propAlto1)
+                maskeuca = cv2.inRange(frameHSV,eucaBajo1,eucaAlto1)
+
                 maskRed1 = cv2.inRange(frameHSV,redBajo1,redAlto1)
                 maskRed2 = cv2.inRange(frameHSV,redBajo2,redAlto2)
                 maskRed = cv2.add(maskRed1,maskRed2)
-                maskGreen=cv2.inRange(frameHSV,greenBajo1,greenAlto1)
-                maskPink=cv2.inRange(frameHSV,pinkBajo1,pinkAlto1)
-                maskPurple=cv2.inRange(frameHSV,violetBajo1,violetAlto1)
 
-                self.dibujar(maskAzul,(255,0,0),ROI,'azul',frame)
-                self.dibujar(maskAmarillo,(0,255,255),ROI,'amarillo',frame)
-                self.dibujar(maskPink,(265,76,90),ROI,'rosa',frame)
-                self.dibujar(maskGreen,(113,74,35),ROI,'verde',frame)
-                self.dibujar(maskPurple,(265,76,90),ROI,'violeta',frame)
-                self.dibujar(maskRed,(0,0,255),ROI,'rojo',frame)
+                masksha=cv2.inRange(frameHSV,shaBajo1,shaAlto1)
+                maskgomi=cv2.inRange(frameHSV,gomiBajo1,gomiAlto1)
+                maskpolen=cv2.inRange(frameHSV,polenBajo1,polenAlto1)
+                maskmiel=cv2.inRange(frameHSV,mielBajo1,mielAlto1)
 
-                #frame=ha.iniciar_video(ret,frame,ROI)
+                self.dibujar(maskprop,(255,0,0),ROI,'propoleo',frame)
+                self.dibujar(maskeuca,(0,255,255),ROI,'eucalipto',frame)
+                self.dibujar(masksha,(265,76,90),ROI,'shampoo',frame)
+                self.dibujar(maskgomi,(113,74,35),ROI,'gomitas',frame)
+                self.dibujar(maskpolen,(265,76,90),ROI,'polen',frame)
+                #self.dibujar(maskRed,(0,0,255),ROI,'rojo',frame)
+                self.dibujar(maskmiel,(0,0,255),ROI,'miel',frame)
+
+           
                 frame = imutils.resize(frame, width=700)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 self.imagenGlobal=img.copy()
@@ -141,8 +153,7 @@ class Application(tk.Frame):
                 if cv2.waitKey(2)==ord('f'):
                      cv2.imwrite('postImages/Miel'+str(self.__i)+'.jpg',frame)
                      self.__i+=1
-            
-                    
+             
             else:
        
                 lblVideo.image = ""
@@ -214,21 +225,25 @@ class Application(tk.Frame):
         orient=tk.HORIZONTAL, length=200, showvalue=5,
         tickinterval=2, resolution=0.01)
         self.scale.grid(column=0,row=3,padx=5,pady=5) 
+        self.scale.set(6)
         
         self.Neighbors = tk.Scale(self,variable=self.neigbors, label='minNeighbors', from_=20, to=100, 
         orient=tk.HORIZONTAL, length=200, showvalue=95,
         tickinterval=20, resolution=0.01)
         self.Neighbors.grid(column=1,row=3,padx=5,pady=5) 
+        self.Neighbors.set(95)
 
         self.sizew = tk.Scale(self, variable=self.sW,label='Wi', from_=1, to=100, 
         orient=tk.HORIZONTAL, length=200, showvalue=5,
         tickinterval=30, resolution=0.01)
         self.sizew.grid(column=0,row=4,padx=5,pady=5) 
+        self.sizew.set(60)
         
         self.sizeh = tk.Scale(self,variable=self.sH, label='HE', from_=1, to=100, 
         orient=tk.HORIZONTAL, length=200, showvalue=95,
         tickinterval=30, resolution=0.01)
-        self.sizeh.grid(column=1,row=4,padx=5,pady=5) 
+        self.sizeh.grid(column=1,row=4,padx=5,pady=5)
+        self.sizeh.set(68) 
 
         global lblVideo
         lblVideo=tk.Label(self,height =400)
