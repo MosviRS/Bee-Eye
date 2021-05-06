@@ -8,6 +8,7 @@ import numpy as np
 import asyncio
 from clases.postProcesamiento import postporcesmiento
 import cv2 as cv2
+import fontawesome as fa
 
 
 class Application(tk.Frame):
@@ -22,6 +23,7 @@ class Application(tk.Frame):
         self.__i=0
         self.imagenGlobal=None
         self.objimg=postporcesmiento()
+        self.listaConteoProductos=[]
        
        
       
@@ -161,6 +163,7 @@ class Application(tk.Frame):
        
     def takepicture(self):
        #await asyncio.sleep(2)
+        
         img=self.imagenGlobal
         scale_percent = 50 # percent of original size
         width = int(img.shape[1] * scale_percent / 100)
@@ -168,11 +171,42 @@ class Application(tk.Frame):
         dim = (width, height)
         #resize image
         resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        self.objimg.main(img)
+        
+        self.listaConteoProductos=self.objimg.main(img)
+        print(self.listaConteoProductos)
+        prop='0'
+        euca='0'
+        pol='0'
+        mie='0'
+        gomi='0'
+        shp='0'
+        for i in self.listaConteoProductos:
+            for key in i:
+                if str(key)=='propoleo':
+                     prop=str(i[key])
+                if str(key)=='eucalipto':
+                    euca=str(i[key])
+                if str(key)=='polen':
+                    pol=str(i[key])
+                if str(key)=='gomitas':
+                    gomi=str(i[key])
+                if str(key)=='miel':
+                     mie=str(i[key])
+                if str(key)=='shampoo':
+                     shp=str(i[key])
+                print(key+str(i[key])+"resild "+prop)
+                
+       # lblPropoleo['text']=listaConteoProductos
+        lblEuca['text']='Eucalipto : '+str(euca)
+        lblPropoleo['text']='Propoleo : '+str(prop)
+        lblPolen['text']='Polen : '+str(pol)
+        lblGomitas['text']='Gomitas : '+str(gomi)
+        lblMiel['text']='Miel : '+str(mie)
+        lblShampoo['text']='Shampoo : '+str(shp)
         self.__i+=1
     def detener(self):
         self.cap.release()
-        ImagenFondo=cv2.imread("Images/imagenvacia.png")
+        ImagenFondo=cv2.imread("Images/backimage.png")
         ImagenFondo = imutils.resize(ImagenFondo, width=700)
         im = Image.fromarray(  ImagenFondo)
         img = ImageTk.PhotoImage(image=im)
@@ -180,7 +214,7 @@ class Application(tk.Frame):
         lblVideo.image = img
         self.Button1["state"]=tk.NORMAL
         self.Button3["state"]=tk.DISABLED
-
+      
     def iniciar_prueba(self):
         self.cap = cv2.VideoCapture(0)
         self.Button1["state"]=tk.DISABLED
@@ -194,14 +228,51 @@ class Application(tk.Frame):
                 self.deteccion()
             else:
                 self.visualizar()
+    def panlesProductos(self):
+        
+        global lblPropoleo
+        lblPropoleo=tk.Label(self,height=2,text="Propoleo :",width=25)
+        lblPropoleo.config(
+             font=("Verdana",17),anchor="nw")
+        lblPropoleo.grid(column=3,row=0,columnspan=1)
+       
+        global lblMiel
+        lblMiel=tk.Label(self,height=2,text="Miel :",width=25,anchor="w")
+        lblMiel.grid(column=3,row=1,columnspan=1,rowspan=1)
+        lblMiel.config(
+             font=("Verdana",17))
+        global lblShampoo
+        lblShampoo=tk.Label(self,height=2,text="Shampoo :",width=25,anchor="w")
+        lblShampoo.grid(column=3,row=2,columnspan=1,rowspan=1)
+        lblShampoo.config(
+             font=("Verdana",17)) 
+        global lblPolen
+        lblPolen=tk.Label(self,height=2,text="Polen :",width=25,anchor="w")
+        lblPolen.grid(column=3,row=3,columnspan=1,rowspan=1)
+        lblPolen.config(
+             font=("Verdana",17))
+        global lblEuca
+        lblEuca=tk.Label(self,height=2,text="Eucalipto :",width=25,anchor="w")
+        lblEuca.grid(column=3,row=4,columnspan=1,rowspan=1)
+        lblEuca.config(
+             font=("Verdana",17))
+        global lblGomitas
+        lblGomitas=tk.Label(self,height=2,text="Gomitas :",width=25,anchor="w")
+        lblGomitas.grid(column=3,row=5,columnspan=1,rowspan=1)
+        lblGomitas.config(
+             font=("Verdana",17))    
+  
+ 
+  
 
     def principal_interfaz(self):
-        self.Button1 = tk.Button(self,width=45)
+       
+        self.Button1 = tk.Button(self,width=45,bg='#59D859',fg='white',activebackground='#C7C8C5')
         self.Button1["text"] = "Empezar"
         self.Button1.grid(column=0,row=0,padx=5,pady=5)
         self.Button1["command"] = self.iniciar_prueba
 
-        self.Button2 = tk.Button(self,width=45)
+        self.Button2 = tk.Button(self,width=45,bg='#DEB423',fg='black',activebackground='#C7C8C5')
         self.Button2["text"] = "Terminar"
         self.Button2.grid(column=1,row=0,padx=5,pady=5)
         self.Button2["command"] = self.detener
@@ -213,55 +284,54 @@ class Application(tk.Frame):
         
 
 
-
         self.Radiobutton1=tk.Radiobutton(self, text="Color       ", variable=self.opcion,
-        value=1)
+        value=1,height=1)
         self.Radiobutton1.grid(column=0,row=1)
         self.Radiobutton2=tk.Radiobutton(self, text="Deteccion", variable=self.opcion,
-        value=2)
+        value=2,height=1)
         self.Radiobutton2.grid(column=1,row=1)   
 
         self.scale = tk.Scale(self, variable=self.scale,label='Sacale Factor', from_=3, to=10, 
         orient=tk.HORIZONTAL, length=200, showvalue=5,
         tickinterval=2, resolution=0.01)
-        self.scale.grid(column=0,row=3,padx=5,pady=5) 
+        self.scale.grid(column=0,row=2,padx=5,pady=5) 
         self.scale.set(6)
         
         self.Neighbors = tk.Scale(self,variable=self.neigbors, label='minNeighbors', from_=20, to=100, 
         orient=tk.HORIZONTAL, length=200, showvalue=95,
         tickinterval=20, resolution=0.01)
-        self.Neighbors.grid(column=1,row=3,padx=5,pady=5) 
+        self.Neighbors.grid(column=1,row=2,padx=5,pady=5) 
         self.Neighbors.set(95)
 
         self.sizew = tk.Scale(self, variable=self.sW,label='Wi', from_=1, to=100, 
         orient=tk.HORIZONTAL, length=200, showvalue=5,
         tickinterval=30, resolution=0.01)
-        self.sizew.grid(column=0,row=4,padx=5,pady=5) 
+        self.sizew.grid(column=0,row=3,padx=5,pady=5) 
         self.sizew.set(60)
         
         self.sizeh = tk.Scale(self,variable=self.sH, label='HE', from_=1, to=100, 
         orient=tk.HORIZONTAL, length=200, showvalue=95,
         tickinterval=30, resolution=0.01)
-        self.sizeh.grid(column=1,row=4,padx=5,pady=5)
+        self.sizeh.grid(column=1,row=3,padx=5,pady=5)
         self.sizeh.set(68) 
 
         global lblVideo
         lblVideo=tk.Label(self,height =400)
-        lblVideo.grid(column=0,row=5,columnspan=2)
+        lblVideo.grid(column=0,row=4,columnspan=2,rowspan=4)
         #lblVideo.bind("<Return>", self.on_enter_usuario_entry)
-        ImagenFondo=cv2.imread("Images/imagenvacia.png")
+        ImagenFondo=cv2.imread("Images/backimage.png")
         ImagenFondo = imutils.resize(ImagenFondo, width=700)
-        im = Image.fromarray(  ImagenFondo)
+        im = Image.fromarray(ImagenFondo)
         img = ImageTk.PhotoImage(image=im)
         lblVideo.configure(image=img)
         lblVideo.image = img
 
-        self.Button3 = tk.Button(self,width=45)
+        self.Button3 = tk.Button(self,width=45,bg='#1187A9',fg='#FEFFFD',activebackground='#C7C8C5')
         self.Button3["text"] = "Analizar"
-        self.Button3.grid(column=1,row=7,padx=5,pady=5)
+        self.Button3.grid(column=3,row=7,padx=5,pady=5)
         self.Button3["state"]=tk.DISABLED
         self.Button3["command"]=self.takepicture
-
+        self.panlesProductos()
       
 
 

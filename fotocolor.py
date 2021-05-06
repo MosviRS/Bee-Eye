@@ -1,4 +1,5 @@
 import cv2 as cv2
+import numpy as numpy
 import numpy as np
 
 
@@ -27,6 +28,14 @@ def dibujar(colorname,mask,color):
         listOCnteo.append({colorname:int(suma)})
         cv2.imshow('video',frame)
         print(listOCnteo)
+def brillo(img):
+        cols, rows,_ = img.shape
+        brightness = numpy.sum(img) / (255 * cols * rows)
+        minimum_brightness = (0.59)
+        alpha = brightness / minimum_brightness
+        bright_img = cv2.convertScaleAbs(img, alpha = alpha, beta = 255 * (1 - alpha))
+        #cv2.imshow('frame2',img) 
+        return bright_img
 
 if __name__ == "__main__":
       
@@ -57,6 +66,7 @@ if __name__ == "__main__":
 
         fort=cv2.FONT_HERSHEY_SIMPLEX
         frame=cv2.imread('Images/productos2.jpg')
+        #frame=cv2.convertScaleAbs(frame, alpha=0, beta=(-40))
         #scale_percent = 50 # percent of original size
         #width = int(frame.shape[1] * scale_percent / 100)
        # height = int(frame.shape[0] * scale_percent / 100)

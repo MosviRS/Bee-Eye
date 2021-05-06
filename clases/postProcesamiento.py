@@ -255,11 +255,13 @@ class postporcesmiento:
       cv2.destroyAllWindows()
 
       listaPsroductosTexture=self.textureDEtection(lsitaImagens)
-      print(listaPsroductosTexture)
+      #print(listaPsroductosTexture)
       
       #detceion por colores
       listaPsroductosColor=self.detectioncolor(img)
-      print(listaPsroductosColor)
+      #print(listaPsroductosColor)
+
+      return listaPsroductosColor
 
 
       #imglistROI=self.getRoisAutomaticImage(img)      
