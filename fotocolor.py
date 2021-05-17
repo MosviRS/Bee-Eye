@@ -1,6 +1,7 @@
 import cv2 as cv2
-import numpy as numpy
 import numpy as np
+
+
 
 
 def dibujar(colorname,mask,color):
@@ -28,14 +29,31 @@ def dibujar(colorname,mask,color):
         listOCnteo.append({colorname:int(suma)})
         cv2.imshow('video',frame)
         print(listOCnteo)
-def brillo(img):
-        cols, rows,_ = img.shape
-        brightness = numpy.sum(img) / (255 * cols * rows)
-        minimum_brightness = (0.59)
-        alpha = brightness / minimum_brightness
-        bright_img = cv2.convertScaleAbs(img, alpha = alpha, beta = 255 * (1 - alpha))
-        #cv2.imshow('frame2',img) 
-        return bright_img
+def apply_brightness_contrast(input_img, brightness = 0, contrast = 0):
+
+        if brightness != 0:
+            if brightness > 0:
+                shadow = brightness
+                highlight = 255
+            else:
+                shadow = 0
+                highlight = 255 + brightness
+            alpha_b = (highlight - shadow)/255
+            gamma_b = shadow
+
+            buf = cv2.addWeighted(input_img, alpha_b, input_img, 0, gamma_b)
+        else:
+            buf = input_img.copy()
+
+        if contrast != 0:
+            f = 131*(contrast + 127)/(127*(131-contrast))
+            alpha_c = f
+            gamma_c = 127*(1-f)
+
+            buf = cv2.addWeighted(buf, alpha_c, buf, 0, gamma_c)
+
+        return buf
+
 
 if __name__ == "__main__":
       
@@ -74,6 +92,8 @@ if __name__ == "__main__":
         #resize image
        # resized = cv2.resize(frame, dim, interpolation = cv2.INTER_AREA)
         #frame=resized
+      
+        frame=apply_brightness_contrast(frame,-40,0)
         HSV=cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
         maskecu1=cv2.inRange(HSV,eucaBajo1,eucaAlto1)
         maskprop1=cv2.inRange(HSV,propBajo1,propAlto1)

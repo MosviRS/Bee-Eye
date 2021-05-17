@@ -9,8 +9,6 @@ class postporcesmiento:
 
     def __init__(self):
         pass
-    def detectionColor(self):
-       pass
     def promedio(self):
        pass
     def dibujar(self,frame,colorname,mask,color):
@@ -157,23 +155,45 @@ class postporcesmiento:
 
         return listataProductso
 
-    def imageHaarDetection(self,listaImagenes):
-            listaConteo=[]
-            ProductClassif = cv2.CascadeClassifier('C:/Users/user/Downloads/opencv/build/x64/vc14/bin/data/cascade.xml')
-            for i in listaImagenes:
-                frame = i
+    def imageHaarDetection(self,frame):
+            listaDrop=[]
+            dulces = cv2.CascadeClassifier('../haarCascade/dulces.xml')
+            polen = cv2.CascadeClassifier('../haarCascade/polen.xml')
+            miel = cv2.CascadeClassifier('../haarCascade/miel.xml')
 
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                toy = ProductClassif.detectMultiScale(gray,
-                scaleFactor = 5,
-                minNeighbors = 95,
-                minSize=(60,68))
-                for (x,y,w,h) in toy:
+             
+            dulcesd = dulces.detectMultiScale(frame,
+            scaleFactor = 6,
+            minNeighbors = 80,
+            minSize=(60,68))
+
+            polend = polen.detectMultiScale(frame,
+            scaleFactor = 6,
+            minNeighbors = 80,
+            minSize=(60,68))
+
+            mield = miel.detectMultiScale(frame,
+            scaleFactor = 6,
+            minNeighbors = 80,
+            minSize=(60,68))
+            for (x,y,w,h) in dulcesd:
+      
+                cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
+                im_drop=frame[y:y+h,x:x+w]
+                listaDrop.append(im_drop)
+            for (x,y,w,h) in polend:
                 
-                    cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
-                    cv2.putText(frame,'object',(x,y-10),2,0.7,(0,255,0),2,cv2.LINE_AA)
-                    
-                cv2.imshow('frame',frame)
+                cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
+                im_drop=frame[y:y+h,x:x+w]
+                listaDrop.append(im_drop)
+            for (x,y,w,h) in mield:
+                
+                cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
+                im_drop=frame[y:y+h,x:x+w]
+                listaDrop.append(im_drop)
+
+            return listaDrop
+                
     
     def getRoisAutomaticImage(self,image):
         ROIs=[[ 66, 183 ,85 ,166],
@@ -232,7 +252,7 @@ class postporcesmiento:
         crop_number=0 
         #loop over every bounding box save in array "ROIs"
         for rect in ROIs:
-            x1=RO[0]
+            x1=rect[0]
             y1=rect[1]
             x2=rect[2]
             y2=rect[3]
@@ -244,19 +264,39 @@ class postporcesmiento:
                     
             crop_number+=1
         
-    def brillo(self,img):
-        cols, rows,_ = img.shape
-        brightness = numpy.sum(img) / (255 * cols * rows)
-        minimum_brightness = 0.66
-        alpha = brightness / minimum_brightness
-        bright_img = cv2.convertScaleAbs(img, alpha = alpha, beta = 255 * (1 - alpha))
-        #cv2.imshow('frame2',img) 
-        return img      
+    def apply_brightness_contrast(input_img, brightness = 0, contrast = 0):
+
+        if brightness != 0:
+            if brightness > 0:
+                shadow = brightness
+                highlight = 255
+            else:
+                shadow = 0
+                highlight = 255 + brightness
+            alpha_b = (highlight - shadow)/255
+            gamma_b = shadow
+
+            buf = cv2.addWeighted(input_img, alpha_b, input_img, 0, gamma_b)
+        else:
+            buf = input_img.copy()
+
+        if contrast != 0:
+            f = 131*(contrast + 127)/(127*(131-contrast))
+            alpha_c = f
+            gamma_c = 127*(1-f)
+
+            buf = cv2.addWeighted(buf, alpha_c, buf, 0, gamma_c)
+
+        return buf
+
+
+  
+
     def main(self,img):
       listaPsroductosTexture=[]
       listaPsroductosColor=[]
       lsitaImagens=[]
-      img=self.brillo(img)
+    
       #self.getRoisDetectionImage(img)
 
       #Deteccion por etxtura

@@ -38,21 +38,42 @@ class Application(tk.Frame):
         self.quit.pack(side="bottom")
 
     def deteccion(self):
-            majinBooClassif = cv2.CascadeClassifier('C:/Users/user/Downloads/usb/classifier/cascade.xml')
+            dulces = cv2.CascadeClassifier('../haarCascade/dulces.xml')
+            polen = cv2.CascadeClassifier('../haarCascade/polen.xml')
+            miel = cv2.CascadeClassifier('../haarCascade/miel.xml')
             if self.cap is not None:
                 
                 ret,img = self.cap.read()
                 frame=img.copy()
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                toy = majinBooClassif.detectMultiScale(gray,
+                dulcesd = dulces.detectMultiScale(frame,
                 scaleFactor = int(self.scale.get()),
                 minNeighbors = int(self.neigbors.get()),
                 minSize=(self.sW.get(),self.sH.get()))
-                for (x,y,w,h) in toy:
+
+                mield = miel.detectMultiScale(frame,
+                scaleFactor = int(self.scale.get()),
+                minNeighbors = int(self.neigbors.get()),
+                minSize=(self.sW.get(),self.sH.get()))
+             
+                polend = polen.detectMultiScale(frame,
+                scaleFactor = int(self.scale.get()),
+                minNeighbors = int(self.neigbors.get()),
+                minSize=(self.sW.get(),self.sH.get()))
+                
+                for (x,y,w,h) in dulcesd:
                 
                     cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
-                    cv2.putText(frame,'object',(x,y-10),2,0.7,(0,255,0),2,cv2.LINE_AA)
+                    cv2.putText(frame,'Prodcuto',(x,y-10),2,0.7,(0,255,0),2,cv2.LINE_AA)
+                for (x,y,w,h) in mield:
+                
+                    cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
+                    cv2.putText(frame,'Prodcuto',(x,y-10),2,0.7,(0,255,0),2,cv2.LINE_AA)
+                for (x,y,w,h) in polend:
+                
+                    cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
+                    cv2.putText(frame,'Prodcuto',(x,y-10),2,0.7,(0,255,0),2,cv2.LINE_AA)
 
                 self.imagenGlobal=img.copy()
                 im = Image.fromarray(frame)
