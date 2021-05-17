@@ -125,7 +125,7 @@ class postporcesmiento:
         cv2.imshow('regiones',img)
        
     def textureDEtection(self,listaImagenes):
-       
+        conteo=0
         print('Extrayendo features...')
         listaConteo=[]
         # Ciclamos por las imágenes de prueba.
@@ -141,8 +141,21 @@ class postporcesmiento:
             # Imprimimos la predicción (textura) en la imagen.
             prediction = model.predict(features.reshape(1, -1))[0]
             cv2.putText(img, prediction, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 3)
-            listaConteo.append(str(prediction))
-        return listaConteo
+            listaConteo.append(str(prediction).replace('train2\\',''))
+            listataProductso=[]
+            dicttonary={}
+            for i in listaConteo:
+                try:
+                 if dicttonary[i]!= None:
+                    dicttonary[i]=dicttonary[i]+1
+                except:
+                    dicttonary[i]=1
+            for key in  dicttonary:
+               listataProductso.append({key:dicttonary[key]})
+
+              
+
+        return listataProductso
 
     def imageHaarDetection(self,listaImagenes):
             listaConteo=[]
@@ -255,11 +268,11 @@ class postporcesmiento:
       cv2.destroyAllWindows()
 
       listaPsroductosTexture=self.textureDEtection(lsitaImagens)
-      #print(listaPsroductosTexture)
+      print(listaPsroductosTexture)
       
       #detceion por colores
       listaPsroductosColor=self.detectioncolor(img)
-      #print(listaPsroductosColor)
+      print(listaPsroductosColor)
 
       return listaPsroductosColor
 

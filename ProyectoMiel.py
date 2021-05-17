@@ -173,7 +173,7 @@ class Application(tk.Frame):
         resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
         
         self.listaConteoProductos=self.objimg.main(img)
-        print(self.listaConteoProductos)
+        
         prop='0'
         euca='0'
         pol='0'
@@ -194,7 +194,7 @@ class Application(tk.Frame):
                      mie=str(i[key])
                 if str(key)=='shampoo':
                      shp=str(i[key])
-                print(key+str(i[key])+"resild "+prop)
+                
                 
        # lblPropoleo['text']=listaConteoProductos
         lblEuca['text']='Eucalipto : '+str(euca)
@@ -264,7 +264,6 @@ class Application(tk.Frame):
   
  
   
-
     def principal_interfaz(self):
        
         self.Button1 = tk.Button(self,width=45,bg='#59D859',fg='white',activebackground='#C7C8C5')
@@ -282,7 +281,6 @@ class Application(tk.Frame):
         self.sW= tk.IntVar() 
         self.sH= tk.IntVar() 
         
-
 
         self.Radiobutton1=tk.Radiobutton(self, text="Color       ", variable=self.opcion,
         value=1,height=1)
@@ -337,7 +335,6 @@ class Application(tk.Frame):
 
     __principal_interfaz=principal_interfaz
     
-
    
     def say_hi(self):
         print("hi there, everyone!")
