@@ -17,7 +17,7 @@ class postporcesmiento:
         filas=0
         for c in controno:
             area=cv2.contourArea(c)
-            if area > 1500:
+            if area > 2000:
                    M=cv2.moments(c)
                    if M['m10']==0: M['m00']=1
                    x=int(M['m10']/M['m00'])
