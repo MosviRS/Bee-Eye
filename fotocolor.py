@@ -11,7 +11,7 @@ def dibujar(colorname,mask,color):
         filas=0
         for c in controno:
             area=cv2.contourArea(c)
-            if area > 1500:
+            if area > 1700:
                    M=cv2.moments(c)
                    if M['m10']==0: M['m00']=1
                    x=int(M['m10']/M['m00'])
@@ -70,20 +70,23 @@ if __name__ == "__main__":
         eucaBajo1=np.array([30,100,20],np.uint8(8))
         eucaAlto1=np.array([65,255,255],np.uint8(8))
         #polen
-        polenBajo1 = np.array([15,120,140],np.uint8)
-        polenAlto1 = np.array([255,180,220],np.uint8)
+        polenBajo1 = np.array([10,10,30],np.uint8)
+        polenAlto1 = np.array([140,190,80],np.uint8)
         #shmapoo
         shaBajo1 = np.array([14,190,130],np.uint8)
         shaAlto1 = np.array([19,255,255],np.uint8)
         #gomitas
-        gomiBajo1 = np.array([14,0,225],np.uint8)
-        gomiAlto1 = np.array([100,150,255],np.uint8)
+
+        gomiBajo1 = np.array([8,80,80],np.uint8)
+        gomiAlto1 = np.array([19,255,255],np.uint8)
+
+
         #miel
         mielBajo1=np.array([0,190,60],np.uint8(8))
         mielAlto1=np.array([30,220,175],np.uint8(8))
 
         fort=cv2.FONT_HERSHEY_SIMPLEX
-        frame=cv2.imread('Images/productos2.jpg')
+        frame=cv2.imread('Images/pro.png')
         #frame=cv2.convertScaleAbs(frame, alpha=0, beta=(-40))
         #scale_percent = 50 # percent of original size
         #width = int(frame.shape[1] * scale_percent / 100)

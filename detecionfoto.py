@@ -3,7 +3,7 @@ import cv2 as cv2
 dulces = cv2.CascadeClassifier('../haarCascade/dulces.xml')
 polen = cv2.CascadeClassifier('../haarCascade/polen.xml')
 miel = cv2.CascadeClassifier('../haarCascade/miel.xml')
-frame = cv2.imread('Images/productos.png')
+frame = cv2.imread('Images/polencolor.png')
 scale_percent = 50 # percent of original size
 width = int(frame.shape[1] * scale_percent / 100)
 height = int(frame.shape[0] * scale_percent / 100)

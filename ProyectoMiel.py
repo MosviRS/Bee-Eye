@@ -137,13 +137,13 @@ class Application(tk.Frame):
         eucaBajo1=np.array([30,100,20],np.uint8(8))
         eucaAlto1=np.array([65,255,255],np.uint8(8))
         #polen
-        polenBajo1 = np.array([15,120,140],np.uint8)
-        polenAlto1 = np.array([255,180,220],np.uint8)
+        polenBajo1 = np.array([15,120,140],np.uint8(8))
+        polenAlto1 = np.array([255,180,220],np.uint8(8))
         #shmapoo
         shaBajo1 = np.array([14,190,130],np.uint8)
         shaAlto1 = np.array([18,255,255],np.uint8)
         #gomitas
-        gomiBajo1 = np.array([14,0,190],np.uint8)
+        gomiBajo1 = np.array([14,0,225],np.uint8)
         gomiAlto1 = np.array([100,150,255],np.uint8)
         #miel
         mielBajo1=np.array([0,190,60],np.uint8(8))
