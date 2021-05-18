@@ -38,9 +38,9 @@ class Application(tk.Frame):
         self.quit.pack(side="bottom")
 
     def deteccion(self):
-            dulces = cv2.CascadeClassifier('../haarCascade/dulces.xml')
-            polen = cv2.CascadeClassifier('../haarCascade/polen.xml')
-            miel = cv2.CascadeClassifier('../haarCascade/miel.xml')
+            dulces = cv2.CascadeClassifier('haarCascade/dulces.xml')
+            polen = cv2.CascadeClassifier('haarCascade/polen.xml')
+            miel = cv2.CascadeClassifier('haarCascade/miel.xml')
             if self.cap is not None:
                 
                 ret,img = self.cap.read()
