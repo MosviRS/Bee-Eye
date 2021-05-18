@@ -143,7 +143,7 @@ class Application(tk.Frame):
         shaBajo1 = np.array([14,190,130],np.uint8)
         shaAlto1 = np.array([18,255,255],np.uint8)
         #gomitas
-        gomiBajo1 = np.array([14,0,225],np.uint8)
+        gomiBajo1 = np.array([14,0,190],np.uint8)
         gomiAlto1 = np.array([100,150,255],np.uint8)
         #miel
         mielBajo1=np.array([0,190,60],np.uint8(8))
