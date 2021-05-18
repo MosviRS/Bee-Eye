@@ -40,12 +40,15 @@ class Application(tk.Frame):
             dulces = cv2.CascadeClassifier('haarCascade/dulces.xml')
             polen = cv2.CascadeClassifier('haarCascade/polen.xml')
             miel = cv2.CascadeClassifier('haarCascade/miel.xml')
+            eucalipto = cv2.CascadeClassifier('haarCascade/eucalipto.xml')
+            propoleo = cv2.CascadeClassifier('haarCascade/propoleo.xml')
             if self.cap is not None:
                 
                 ret,img = self.cap.read()
                 frame=img.copy()
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
                 dulcesd = dulces.detectMultiScale(frame,
                 scaleFactor = int(self.scale.get()),
                 minNeighbors = int(self.neigbors.get()),
@@ -60,21 +63,39 @@ class Application(tk.Frame):
                 scaleFactor = int(self.scale.get()),
                 minNeighbors = int(self.neigbors.get()),
                 minSize=(self.sW.get(),self.sH.get()))
+
+                eucaliptod = eucalipto.detectMultiScale(frame,
+                scaleFactor = int(self.scale.get()),
+                minNeighbors = int(self.neigbors.get()),
+                minSize=(self.sW.get(),self.sH.get()))
+             
+                propoleod = propoleo.detectMultiScale(frame,
+                scaleFactor = int(self.scale.get()),
+                minNeighbors = int(self.neigbors.get()),
+                minSize=(self.sW.get(),self.sH.get()))
                 
                 for (x,y,w,h) in dulcesd:
                 
                     cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
-                    cv2.putText(frame,'Prodcuto',(x,y-10),2,0.7,(0,255,0),2,cv2.LINE_AA)
+                    cv2.putText(frame,'Gomitas',(x,y-10),2,0.7,(255,201,129),2,cv2.LINE_AA)
                 for (x,y,w,h) in mield:
                 
                     cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
-                    cv2.putText(frame,'Prodcuto',(x,y-10),2,0.7,(0,255,0),2,cv2.LINE_AA)
+                    cv2.putText(frame,'Miel',(x,y-10),2,0.7,(209,294,44),2,cv2.LINE_AA)
                 for (x,y,w,h) in polend:
                 
                     cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
-                    cv2.putText(frame,'Prodcuto',(x,y-10),2,0.7,(0,255,0),2,cv2.LINE_AA)
+                    cv2.putText(frame,'Polen',(x,y-10),2,0.7,(229,167,59),2,cv2.LINE_AA)
+                for (x,y,w,h) in eucaliptod:
+                
+                    cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
+                    cv2.putText(frame,'eucalipto',(x,y-10),2,0.7,(119,160,32),2,cv2.LINE_AA)
+                for (x,y,w,h) in propoleod:
+                
+                    cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
+                    cv2.putText(frame,'propoleo',(x,y-10),2,0.7,(57,17,10),2,cv2.LINE_AA)
 
-                self.imagenGlobal=img.copy()
+                self.imagenGlobal=img[0:307,0:650].copy()
                 im = Image.fromarray(frame)
                 img = ImageTk.PhotoImage(image=im)
                 lblVideo.configure(image=img)
@@ -91,7 +112,7 @@ class Application(tk.Frame):
         cv2.rectangle(frame,(2,60),(630+2,300+2),(0,255,255),1)
         for c in contornos:
             area = cv2.contourArea(c)
-            if area > 1500:
+            if area > 2000:
                 M = cv2.moments(c)
                 if (M["m00"]==0): M["m00"]=1
                 x = int(M["m10"]/M["m00"])
@@ -166,7 +187,7 @@ class Application(tk.Frame):
            
                 frame = imutils.resize(frame, width=700)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                self.imagenGlobal=img.copy()
+                self.imagenGlobal=img[0:307,0:650].copy()
                 im = Image.fromarray(frame)
                 img = ImageTk.PhotoImage(image=im)
                 lblVideo.configure(image=img)
@@ -190,7 +211,7 @@ class Application(tk.Frame):
         height = int(img.shape[0] * scale_percent / 100)
         dim = (width, height)
         #resize image
-        resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+        #resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
         
         self.listaConteoProductos=self.objimg.main(img)
         
@@ -254,31 +275,31 @@ class Application(tk.Frame):
         lblPropoleo=tk.Label(self,height=2,text="Propoleo :",width=25)
         lblPropoleo.config(
              font=("Verdana",17),anchor="nw")
-        lblPropoleo.grid(column=3,row=0,columnspan=1)
+        lblPropoleo.grid(column=3,row=1,columnspan=1)
        
         global lblMiel
         lblMiel=tk.Label(self,height=2,text="Miel :",width=25,anchor="w")
-        lblMiel.grid(column=3,row=1,columnspan=1,rowspan=1)
+        lblMiel.grid(column=3,row=2,columnspan=1,rowspan=1)
         lblMiel.config(
              font=("Verdana",17))
         global lblShampoo
         lblShampoo=tk.Label(self,height=2,text="Shampoo :",width=25,anchor="w")
-        lblShampoo.grid(column=3,row=2,columnspan=1,rowspan=1)
+        lblShampoo.grid(column=3,row=3,columnspan=1,rowspan=1)
         lblShampoo.config(
              font=("Verdana",17)) 
         global lblPolen
         lblPolen=tk.Label(self,height=2,text="Polen :",width=25,anchor="w")
-        lblPolen.grid(column=3,row=3,columnspan=1,rowspan=1)
+        lblPolen.grid(column=3,row=4,columnspan=1,rowspan=1)
         lblPolen.config(
              font=("Verdana",17))
         global lblEuca
         lblEuca=tk.Label(self,height=2,text="Eucalipto :",width=25,anchor="w")
-        lblEuca.grid(column=3,row=4,columnspan=1,rowspan=1)
+        lblEuca.grid(column=3,row=5,columnspan=1,rowspan=1)
         lblEuca.config(
              font=("Verdana",17))
         global lblGomitas
         lblGomitas=tk.Label(self,height=2,text="Gomitas :",width=25,anchor="w")
-        lblGomitas.grid(column=3,row=5,columnspan=1,rowspan=1)
+        lblGomitas.grid(column=3,row=6,columnspan=1,rowspan=1)
         lblGomitas.config(
              font=("Verdana",17))    
   
@@ -346,7 +367,7 @@ class Application(tk.Frame):
         lblVideo.configure(image=img)
         lblVideo.image = img
 
-        self.Button3 = tk.Button(self,width=45,bg='#1187A9',fg='#FEFFFD',activebackground='#C7C8C5'
+        self.Button3 = tk.Button(self,width=45,bg='#1187A9',fg='black',activebackground='#C7C8C5'
         ,font=("Verdana",8))
         self.Button3["text"] = "Analizar"
         self.Button3.grid(column=3,row=7,padx=5,pady=5)

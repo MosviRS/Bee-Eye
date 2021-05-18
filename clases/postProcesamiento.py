@@ -302,10 +302,10 @@ class postporcesmiento:
       #Deteccion por etxtura
       lsitaImagens=self.getRoisAutomaticImage(img)
       lsitaImagens=self.getRoiTextures(lsitaImagens)
-      for i in lsitaImagens:
-        cv2.imshow('frame',i)
-        cv2.waitKey(0)
-      cv2.destroyAllWindows()
+     # for i in lsitaImagens:
+       # cv2.imshow('frame',i)
+        #cv2.waitKey(0)
+      #cv2.destroyAllWindows()
 
       listaPsroductosTexture=self.textureDEtection(lsitaImagens)
       print(listaPsroductosTexture)
