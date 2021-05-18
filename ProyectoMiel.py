@@ -25,8 +25,7 @@ class Application(tk.Frame):
         self.objimg=postporcesmiento()
         self.listaConteoProductos=[]
        
-       
-      
+    
     def create_widgets(self):
         self.hi_there = tk.Button(self)
         self.hi_there["text"] = "Empezar"
@@ -127,7 +126,7 @@ class Application(tk.Frame):
         gomiAlto1 = np.array([100,150,255],np.uint8)
         #miel
         mielBajo1=np.array([0,190,60],np.uint8(8))
-        mielAlto1=np.array([30,220,175],np.uint8(8))
+        mielAlto1=np.array([30,245,190],np.uint8(8))
 
         redBajo1=np.array([0,100,20],np.uint8(8))
         redAlto1=np.array([8,255,255],np.uint8(8))
@@ -287,12 +286,14 @@ class Application(tk.Frame):
   
     def principal_interfaz(self):
        
-        self.Button1 = tk.Button(self,width=45,bg='#59D859',fg='white',activebackground='#C7C8C5')
+        self.Button1 = tk.Button(self,width=45,bg='#59D859',fg='white',activebackground='#C7C8C5',
+        font=("Verdana",10))
         self.Button1["text"] = "Empezar"
         self.Button1.grid(column=0,row=0,padx=5,pady=5)
         self.Button1["command"] = self.iniciar_prueba
 
-        self.Button2 = tk.Button(self,width=45,bg='#DEB423',fg='black',activebackground='#C7C8C5')
+        self.Button2 = tk.Button(self,width=45,bg='#DEB423',fg='black',activebackground='#C7C8C5',
+        font=("Verdana",10))
         self.Button2["text"] = "Terminar"
         self.Button2.grid(column=1,row=0,padx=5,pady=5)
         self.Button2["command"] = self.detener
@@ -345,7 +346,8 @@ class Application(tk.Frame):
         lblVideo.configure(image=img)
         lblVideo.image = img
 
-        self.Button3 = tk.Button(self,width=45,bg='#1187A9',fg='#FEFFFD',activebackground='#C7C8C5')
+        self.Button3 = tk.Button(self,width=45,bg='#1187A9',fg='#FEFFFD',activebackground='#C7C8C5'
+        ,font=("Verdana",8))
         self.Button3["text"] = "Analizar"
         self.Button3.grid(column=3,row=7,padx=5,pady=5)
         self.Button3["state"]=tk.DISABLED

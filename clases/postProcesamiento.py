@@ -55,7 +55,7 @@ class postporcesmiento:
         gomiAlto1 = np.array([100,150,255],np.uint8)
         #miel
         mielBajo1=np.array([0,190,60],np.uint8(8))
-        mielAlto1=np.array([30,220,175],np.uint8(8))
+        mielAlto1=np.array([30,245,190],np.uint8(8))
 
         fort=cv2.FONT_HERSHEY_SIMPLEX
         frame=img
