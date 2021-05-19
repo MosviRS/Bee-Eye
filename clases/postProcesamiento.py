@@ -76,6 +76,7 @@ class postporcesmiento:
         shadic=self.dibujar(frame,'shampoo',maskshmap1,(0,0,255))
         gomdict=self.dibujar(frame,'gomitas', maskgomi1,(0,0,255))
         miedict=self.dibujar(frame,'miel', maskmiel1,(0,0,255))
+    
         listOCnteo=[propdic,eucdic,poldic,shadic,gomdict,miedict]
         return listOCnteo
 

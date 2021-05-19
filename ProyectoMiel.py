@@ -176,13 +176,13 @@ class Application(tk.Frame):
                 maskpolen=cv2.inRange(frameHSV,polenBajo1,polenAlto1)
                 maskmiel=cv2.inRange(frameHSV,mielBajo1,mielAlto1)
 
-                self.dibujar(maskprop,(255,0,0),ROI,'propoleo',frame)
-                self.dibujar(maskeuca,(0,255,255),ROI,'eucalipto',frame)
-                self.dibujar(masksha,(265,76,90),ROI,'shampoo',frame)
-                self.dibujar(maskgomi,(113,74,35),ROI,'gomitas',frame)
-                self.dibujar(maskpolen,(265,76,90),ROI,'polen',frame)
+                self.dibujar(maskprop,(255,0,0),ROI,'1',frame)
+                self.dibujar(maskeuca,(0,255,255),ROI,'5',frame)
+                self.dibujar(masksha,(265,76,90),ROI,'3',frame)
+                self.dibujar(maskgomi,(113,74,35),ROI,'6',frame)
+                self.dibujar(maskpolen,(265,76,90),ROI,'4',frame)
                 #self.dibujar(maskRed,(0,0,255),ROI,'rojo',frame)
-                self.dibujar(maskmiel,(0,0,255),ROI,'miel',frame)
+                self.dibujar(maskmiel,(0,0,255),ROI,'2',frame)
 
            
                 frame = imutils.resize(frame, width=700)
@@ -272,33 +272,33 @@ class Application(tk.Frame):
     def panlesProductos(self):
         
         global lblPropoleo
-        lblPropoleo=tk.Label(self,height=2,text="Propoleo :",width=25)
+        lblPropoleo=tk.Label(self,height=2,text="1.Propoleo :",width=25)
         lblPropoleo.config(
              font=("Verdana",17),anchor="nw")
         lblPropoleo.grid(column=3,row=1,columnspan=1)
        
         global lblMiel
-        lblMiel=tk.Label(self,height=2,text="Miel :",width=25,anchor="w")
+        lblMiel=tk.Label(self,height=2,text="2.Miel :",width=25,anchor="w")
         lblMiel.grid(column=3,row=2,columnspan=1,rowspan=1)
         lblMiel.config(
              font=("Verdana",17))
         global lblShampoo
-        lblShampoo=tk.Label(self,height=2,text="Shampoo :",width=25,anchor="w")
+        lblShampoo=tk.Label(self,height=2,text="3.Shampoo :",width=25,anchor="w")
         lblShampoo.grid(column=3,row=3,columnspan=1,rowspan=1)
         lblShampoo.config(
              font=("Verdana",17)) 
         global lblPolen
-        lblPolen=tk.Label(self,height=2,text="Polen :",width=25,anchor="w")
+        lblPolen=tk.Label(self,height=2,text="4.Polen :",width=25,anchor="w")
         lblPolen.grid(column=3,row=4,columnspan=1,rowspan=1)
         lblPolen.config(
              font=("Verdana",17))
         global lblEuca
-        lblEuca=tk.Label(self,height=2,text="Eucalipto :",width=25,anchor="w")
+        lblEuca=tk.Label(self,height=2,text="5.Eucalipto :",width=25,anchor="w")
         lblEuca.grid(column=3,row=5,columnspan=1,rowspan=1)
         lblEuca.config(
              font=("Verdana",17))
         global lblGomitas
-        lblGomitas=tk.Label(self,height=2,text="Gomitas :",width=25,anchor="w")
+        lblGomitas=tk.Label(self,height=2,text="6.Gomitas :",width=25,anchor="w")
         lblGomitas.grid(column=3,row=6,columnspan=1,rowspan=1)
         lblGomitas.config(
              font=("Verdana",17))    
