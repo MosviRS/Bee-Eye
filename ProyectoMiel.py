@@ -27,6 +27,7 @@ class Application(tk.Frame):
        
     
     def create_widgets(self):
+        #btotnde empezar video o cerrar la aplicacion
         self.hi_there = tk.Button(self)
         self.hi_there["text"] = "Empezar"
         self.hi_there["command"] = self.say_hi
@@ -37,6 +38,7 @@ class Application(tk.Frame):
         self.quit.pack(side="bottom")
 
     def deteccion(self):
+            #llamado a los archvios de clasifcadores geneardos entreandos previamnete
             dulces = cv2.CascadeClassifier('haarCascade/dulces.xml')
             polen = cv2.CascadeClassifier('haarCascade/polen.xml')
             miel = cv2.CascadeClassifier('haarCascade/miel.xml')
@@ -46,36 +48,37 @@ class Application(tk.Frame):
                 
                 ret,img = self.cap.read()
                 frame=img.copy()
+                #aplicaicon de mascara en grises del video
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-                dulcesd = dulces.detectMultiScale(frame,
+                dulcesd = dulces.detectMultiScale(gray,
                 scaleFactor = int(self.scale.get()),
                 minNeighbors = int(self.neigbors.get()),
                 minSize=(self.sW.get(),self.sH.get()))
 
-                mield = miel.detectMultiScale(frame,
+                mield = miel.detectMultiScale(gray,
                 scaleFactor = int(self.scale.get()),
                 minNeighbors = int(self.neigbors.get()),
                 minSize=(self.sW.get(),self.sH.get()))
              
-                polend = polen.detectMultiScale(frame,
+                polend = polen.detectMultiScale(gray,
                 scaleFactor = int(self.scale.get()),
                 minNeighbors = int(self.neigbors.get()),
                 minSize=(self.sW.get(),self.sH.get()))
 
-                eucaliptod = eucalipto.detectMultiScale(frame,
+                eucaliptod = eucalipto.detectMultiScale(gray,
                 scaleFactor = int(self.scale.get()),
                 minNeighbors = int(self.neigbors.get()),
                 minSize=(self.sW.get(),self.sH.get()))
              
-                propoleod = propoleo.detectMultiScale(frame,
+                propoleod = propoleo.detectMultiScale(gray,
                 scaleFactor = int(self.scale.get()),
                 minNeighbors = int(self.neigbors.get()),
                 minSize=(self.sW.get(),self.sH.get()))
                 
                 for (x,y,w,h) in dulcesd:
-                
+                    #dibujar nombre y rectangulo del producto
                     cv2.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
                     cv2.putText(frame,'Gomitas',(x,y-10),2,0.7,(255,201,129),2,cv2.LINE_AA)
                 for (x,y,w,h) in mield:
@@ -124,7 +127,7 @@ class Application(tk.Frame):
 
     def visualizar(self):
     
-       
+        #declaraciond e rango de colores
         #propoleo
         propBajo1=np.array([0,0,0],np.uint8(8))
         propAlto1=np.array([125,255,30],np.uint8(8))
@@ -155,14 +158,15 @@ class Application(tk.Frame):
         redAlto2=np.array([179,255,255],np.uint8(8))
 
       
-        
+        #validar si la captradora esta en toinmepo real
         if self.cap is not None:
             ret, img = self.cap.read()
             frame=img.copy()
+            #obtencion de area de interes para evitar ruidos
             ROI = frame[0:307,0:650]
             
             if ret == True:
-
+                #aplicaiconde las mascars de color
                 frameHSV = cv2.cvtColor(ROI,cv2.COLOR_BGR2HSV)
                 maskprop = cv2.inRange(frameHSV,propBajo1,propAlto1)
                 maskeuca = cv2.inRange(frameHSV,eucaBajo1,eucaAlto1)
@@ -175,7 +179,8 @@ class Application(tk.Frame):
                 maskgomi=cv2.inRange(frameHSV,gomiBajo1,gomiAlto1)
                 maskpolen=cv2.inRange(frameHSV,polenBajo1,polenAlto1)
                 maskmiel=cv2.inRange(frameHSV,mielBajo1,mielAlto1)
-
+                
+                #dibujar contornos de los productos detectados
                 self.dibujar(maskprop,(255,0,0),ROI,'1',frame)
                 self.dibujar(maskeuca,(0,255,255),ROI,'5',frame)
                 self.dibujar(masksha,(265,76,90),ROI,'3',frame)
@@ -184,7 +189,7 @@ class Application(tk.Frame):
                 #self.dibujar(maskRed,(0,0,255),ROI,'rojo',frame)
                 self.dibujar(maskmiel,(0,0,255),ROI,'2',frame)
 
-           
+                #vizualizacion del vdieo dentro del label
                 frame = imutils.resize(frame, width=700)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 self.imagenGlobal=img[0:307,0:650].copy()
@@ -193,6 +198,7 @@ class Application(tk.Frame):
                 lblVideo.configure(image=img)
                 lblVideo.image = img
                 lblVideo.after(10, self.visualizar)
+                #captura de la imagen
                 if cv2.waitKey(2)==ord('f'):
                      cv2.imwrite('postImages/Miel'+str(self.__i)+'.jpg',frame)
                      self.__i+=1
@@ -204,17 +210,22 @@ class Application(tk.Frame):
        
     def takepicture(self):
        #await asyncio.sleep(2)
-        
+        # captura de la iamgen en timepo real
+
         img=self.imagenGlobal
+        #ajsute de la escald e la iamgem
         scale_percent = 50 # percent of original size
         width = int(img.shape[1] * scale_percent / 100)
         height = int(img.shape[0] * scale_percent / 100)
         dim = (width, height)
         #resize image
         #resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        
+        # pasal al metodo de la clase postprocesameinto
+        #llama al metodo main que devielve el conteod e los productos
+        # dentrod de una lista
         self.listaConteoProductos=self.objimg.main(img)
-        
+        #se relaiza conteo y clasificacion
+        #mustra el conteo dentro de los labels
         prop='0'
         euca='0'
         pol='0'
@@ -246,13 +257,16 @@ class Application(tk.Frame):
         lblShampoo['text']='Shampoo : '+str(shp)
         self.__i+=1
     def detener(self):
+        #finalizaciond del la pcaptura de video
         self.cap.release()
+        #proeyccion de la imagende fondo
         ImagenFondo=cv2.imread("Images/backimage.png")
         ImagenFondo = imutils.resize(ImagenFondo, width=700)
         im = Image.fromarray(  ImagenFondo)
         img = ImageTk.PhotoImage(image=im)
         lblVideo.configure(image=img)
         lblVideo.image = img
+        #deshabilitar el botn analizar y habilitar el de empezar
         self.Button1["state"]=tk.NORMAL
         self.Button3["state"]=tk.DISABLED
       
@@ -270,7 +284,7 @@ class Application(tk.Frame):
             else:
                 self.visualizar()
     def panlesProductos(self):
-        
+        #declacion de los labels que muestrane le conteo de los prodiuctos
         global lblPropoleo
         lblPropoleo=tk.Label(self,height=2,text="1.Propoleo :",width=25)
         lblPropoleo.config(
@@ -306,13 +320,14 @@ class Application(tk.Frame):
  
   
     def principal_interfaz(self):
-       
+       ## INTERFZ DE LA PALICACION
+       #declaracionde botnes
         self.Button1 = tk.Button(self,width=45,bg='#59D859',fg='white',activebackground='#C7C8C5',
         font=("Verdana",10))
         self.Button1["text"] = "Empezar"
         self.Button1.grid(column=0,row=0,padx=5,pady=5)
         self.Button1["command"] = self.iniciar_prueba
-
+        
         self.Button2 = tk.Button(self,width=45,bg='#DEB423',fg='black',activebackground='#C7C8C5',
         font=("Verdana",10))
         self.Button2["text"] = "Terminar"
@@ -324,7 +339,7 @@ class Application(tk.Frame):
         self.sW= tk.IntVar() 
         self.sH= tk.IntVar() 
         
-
+        #declaracion de los RadioButtons
         self.Radiobutton1=tk.Radiobutton(self, text="Color       ", variable=self.opcion,
         value=1,height=1)
         self.Radiobutton1.grid(column=0,row=1)
@@ -355,7 +370,7 @@ class Application(tk.Frame):
         tickinterval=30, resolution=0.01)
         self.sizeh.grid(column=1,row=3,padx=5,pady=5)
         self.sizeh.set(68) 
-
+        # declaracion del labal del video
         global lblVideo
         lblVideo=tk.Label(self,height =400)
         lblVideo.grid(column=0,row=4,columnspan=2,rowspan=4)
