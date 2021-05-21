@@ -33,7 +33,6 @@ class postporcesmiento:
 
     def detectioncolor(self,img):
         listOCnteo=[]
-        #propoleo
         propBajo1=np.array([0,0,0],np.uint8(8))
         propAlto1=np.array([125,255,30],np.uint8(8))
         #rojo
@@ -45,18 +44,22 @@ class postporcesmiento:
         eucaBajo1=np.array([30,100,20],np.uint8(8))
         eucaAlto1=np.array([65,255,255],np.uint8(8))
         #polen
-        polenBajo1 = np.array([15,120,140],np.uint8)
-        polenAlto1 = np.array([255,180,220],np.uint8)
+        polenBajo1 = np.array([0,100,0],np.uint8)
+        polenAlto1 = np.array([140,190,80],np.uint8)
         #shmapoo
-        shaBajo1 = np.array([14,190,130],np.uint8)
-        shaAlto1 = np.array([19,255,255],np.uint8)
+        shaBajo1 = np.array([14,190,130],np.uint8(8))
+        shaAlto1 = np.array([18,255,255],np.uint8(8))
         #gomitas
-        gomiBajo1 = np.array([14,0,225],np.uint8)
-        gomiAlto1 = np.array([100,150,255],np.uint8)
+        gomiBajo1 = np.array([8,80,80],np.uint8)
+        gomiAlto1 = np.array([19,255,255],np.uint8)
         #miel
         mielBajo1=np.array([0,190,60],np.uint8(8))
         mielAlto1=np.array([30,245,190],np.uint8(8))
 
+        redBajo1=np.array([0,100,20],np.uint8(8))
+        redAlto1=np.array([8,255,255],np.uint8(8))
+        redBajo2=np.array([175,100,20],np.uint8(8))
+        redAlto2=np.array([179,255,255],np.uint8(8))
         fort=cv2.FONT_HERSHEY_SIMPLEX
         frame=img
         HSV=cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)

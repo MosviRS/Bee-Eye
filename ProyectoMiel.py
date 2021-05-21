@@ -36,6 +36,20 @@ class Application(tk.Frame):
         self.quit = tk.Button(self, text="QUIT", fg="red",
                               command=self.master.destroy)
         self.quit.pack(side="bottom")
+    def brilloImage(self,frame):
+        if  int(self.scalebrillo.get()) >= 0:
+
+            hsvImg = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
+            #value = 40
+            vValue = hsvImg[...,2]
+            hsvImg[...,2] = np.where((255-vValue)< int(self.scalebrillo.get()),255,vValue+int(self.scalebrillo.get()))  
+            frame=cv2.cvtColor(hsvImg,cv2.COLOR_HSV2BGR)  
+        else:
+            hsvImg = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
+            # decreasing the V channel by a factor from the original
+            hsvImg[...,2] = hsvImg[...,2]*0.6
+            frame=cv2.cvtColor(hsvImg,cv2.COLOR_HSV2BGR)
+        return frame       
 
     def deteccion(self):
             #llamado a los archvios de clasifcadores geneardos entreandos previamnete
@@ -47,6 +61,7 @@ class Application(tk.Frame):
             if self.cap is not None:
                 
                 ret,img = self.cap.read()
+                img=self.brilloImage(img)
                 frame=img.copy()
                 #aplicaicon de mascara en grises del video
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -105,8 +120,7 @@ class Application(tk.Frame):
                 lblVideo.image = img
                 lblVideo.after(10, self.deteccion)
                 #cv2.imshow('frame',frame)
-                
-             
+                       
 
     #__create_widgets=create_widgets
     def dibujar(self,mask,color,ROI,namecolor,frame):
@@ -127,8 +141,6 @@ class Application(tk.Frame):
 
     def visualizar(self):
     
-        #declaraciond e rango de colores
-        #propoleo
         propBajo1=np.array([0,0,0],np.uint8(8))
         propAlto1=np.array([125,255,30],np.uint8(8))
         #rojo
@@ -140,14 +152,14 @@ class Application(tk.Frame):
         eucaBajo1=np.array([30,100,20],np.uint8(8))
         eucaAlto1=np.array([65,255,255],np.uint8(8))
         #polen
-        polenBajo1 = np.array([15,120,140],np.uint8(8))
-        polenAlto1 = np.array([255,180,220],np.uint8(8))
+        polenBajo1 = np.array([0,100,0],np.uint8)
+        polenAlto1 = np.array([140,190,80],np.uint8)
         #shmapoo
-        shaBajo1 = np.array([14,190,130],np.uint8)
-        shaAlto1 = np.array([18,255,255],np.uint8)
+        shaBajo1 = np.array([14,190,130],np.uint8(8))
+        shaAlto1 = np.array([18,255,255],np.uint8(8))
         #gomitas
-        gomiBajo1 = np.array([14,0,225],np.uint8)
-        gomiAlto1 = np.array([100,150,255],np.uint8)
+        gomiBajo1 = np.array([8,80,80],np.uint8)
+        gomiAlto1 = np.array([19,255,255],np.uint8)
         #miel
         mielBajo1=np.array([0,190,60],np.uint8(8))
         mielAlto1=np.array([30,245,190],np.uint8(8))
@@ -156,11 +168,12 @@ class Application(tk.Frame):
         redAlto1=np.array([8,255,255],np.uint8(8))
         redBajo2=np.array([175,100,20],np.uint8(8))
         redAlto2=np.array([179,255,255],np.uint8(8))
-
+        
       
         #validar si la captradora esta en toinmepo real
         if self.cap is not None:
             ret, img = self.cap.read()
+            img=self.brilloImage(img)
             frame=img.copy()
             #obtencion de area de interes para evitar ruidos
             ROI = frame[0:307,0:650]
@@ -278,10 +291,13 @@ class Application(tk.Frame):
         
         if self.cap.isOpened() is not None:
             if int(self.opcion.get())== 1:
+                self.scalebrillo.set(0)
                 self.visualizar()
             elif int(self.opcion.get())== 2:
+                self.scalebrillo.set(0)
                 self.deteccion()
             else:
+                self.scalebrillo.set(0)
                 self.visualizar()
     def panlesProductos(self):
         #declacion de los labels que muestrane le conteo de los prodiuctos
@@ -316,7 +332,8 @@ class Application(tk.Frame):
         lblGomitas.grid(column=3,row=6,columnspan=1,rowspan=1)
         lblGomitas.config(
              font=("Verdana",17))    
-  
+        
+       
  
   
     def principal_interfaz(self):
@@ -338,6 +355,7 @@ class Application(tk.Frame):
         self.neigbors= tk.IntVar() 
         self.sW= tk.IntVar() 
         self.sH= tk.IntVar() 
+        self.scalebrillo=tk.IntVar()
         
         #declaracion de los RadioButtons
         self.Radiobutton1=tk.Radiobutton(self, text="Color       ", variable=self.opcion,
@@ -352,7 +370,15 @@ class Application(tk.Frame):
         tickinterval=2, resolution=0.01)
         self.scale.grid(column=0,row=2,padx=5,pady=5) 
         self.scale.set(6)
+
+        self.scalebrillo = tk.Scale(self, variable=self.scalebrillo,label='Escala de brillo', from_=(-200), to=200, 
+        orient=tk.HORIZONTAL, length=200, showvalue=5,
+        tickinterval=100, resolution=0.01)
+        self.scalebrillo.grid(column=3,row=0,padx=5,pady=5) 
+        self.scalebrillo.set(0)
+     
         
+    
         self.Neighbors = tk.Scale(self,variable=self.neigbors, label='minNeighbors', from_=20, to=100, 
         orient=tk.HORIZONTAL, length=200, showvalue=95,
         tickinterval=20, resolution=0.01)
